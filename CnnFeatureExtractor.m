@@ -63,7 +63,7 @@ classdef CnnFeatureExtractor < handle
             %      passing it to the network (default: [], meaning no
             %      scaling)
             %    - batch_size: batch size (default: 256)
-            %    - sequare_crop: whether to perform square cropping instead
+            %    - square_crop: whether to perform square cropping instead
             %      of warp cropping (default: false)
             %    - padding: additional padding to apply around crops
             %      (default: 0)
@@ -82,7 +82,7 @@ classdef CnnFeatureExtractor < handle
             parser.addParameter('batch_size', 256, @isscalar);
             parser.addParameter('square_crop', false, @islogical);
             parser.addParameter('padding', 0, @isnumeric);
-            parser.addParameter('use_gpu', false, @isnumeric);
+            parser.addParameter('use_gpu', false, @islogical);
             parser.parse(varargin{:});
             
             self.batch_size = parser.Results.batch_size;
@@ -127,8 +127,8 @@ classdef CnnFeatureExtractor < handle
             self.input_dim = self.cnn.blobs('data').shape;
         end
         
-        function output = extract (self, I, varargin)
-            % output = EXTRACT (self, I, varargin)
+        function [ output, time ] = extract (self, I, varargin)
+            % [ output, time ] = EXTRACT (self, I, varargin)
             %
             % Extracts CNN features from specified regions in the input
             % image, as response values in the specified layer.
@@ -148,11 +148,14 @@ classdef CnnFeatureExtractor < handle
             % Output:
             %  - output: DxN matrix of responses, where D is response
             %    dimension and N is number of regions
+            %  - time: time required to obtain the output
             
             parser = inputParser();
             parser.addParameter('regions', [], @isnumeric);
             parser.addParameter('layer_name', '', @ischar);
             parser.parse(varargin{:});
+            
+            t = tic();
             
             % Default box: whole image
             regions = parser.Results.regions;
@@ -213,10 +216,13 @@ classdef CnnFeatureExtractor < handle
             end
             
             assert(num_regions == 0, 'Bug in code!');
+            
+            % Record the time
+            time = toc(t);
         end
     end
     
-    methods (Access = Private)
+    methods (Access = private)
         function output = extract_batch (self, I, regions, layer_name)
             % output = EXTRACT_BATCH (self, I, regions, layer_name)
             %
@@ -316,9 +322,14 @@ classdef CnnFeatureExtractor < handle
                     crop_width = crop_size - pad_x1;
                 end
             end
-
+            
             % Cut the region from input image
-            window = I(region(2):region(4), region(1):region(3), :);
+            x1 = min(max( round(region(1)), 1), size(I, 2));
+            x2 = min(max( round(region(3)), 1), size(I, 2));
+            y1 = min(max( round(region(2)), 1), size(I, 1));
+            y2 = min(max( round(region(4)), 1), size(I, 1));
+            
+            window = I(y1:y2, x1:x2, :);
             
             % Turn off antialiasing to better match OpenCV's bilinear 
             % interpolation in Caffe's WindowDataLayer.
