@@ -96,13 +96,22 @@ classdef CnnFeatureExtractor < handle
             end
             
             %% Pixel means
-            if ~isempty(parser.Results.pixel_means),
-                if ischar(parser.Results.pixel_means),
+            pixel_means = parser.Results.pixel_means;
+            if ~isempty(pixel_means),
+                if ischar(pixel_means),
                     % Filename
-                    self.pixel_means = caffe.io.read_mean(parser.Results.pixel_means);
-                elseif isnumeric(parser.Results.pixel_means),
+                    [ ~, ~, ext ] = fileparts(pixel_means);
+                    if isequal(ext, '.mat'),
+                        % MAT file, containing 'pixel_means' variable
+                        tmp = load(pixel_means);
+                        self.pixel_means = tmp.pixel_means;
+                    else
+                        % Caffe binary format
+                        self.pixel_means = caffe.io.read_mean(pixel_means);
+                    end
+                elseif isnumeric(pixel_means),
                     % Numeric values
-                    self.pixel_means = parser.Results.pixel_means;
+                    self.pixel_means = pixel_means;
                 end
             end
             
