@@ -111,7 +111,7 @@ classdef CnnFeatureExtractor < handle
                     end
                 elseif isnumeric(pixel_means),
                     % Numeric values
-                    self.pixel_means = pixel_means;
+                    self.pixel_means = squeeze(pixel_means);
                 end
             end
             
@@ -347,7 +347,8 @@ classdef CnnFeatureExtractor < handle
             % Subtract pixel means
             if ~isempty(self.pixel_means),
                 if isvector(self.pixel_means),
-                    tmp = bsxfun(@minus, tmp, self.pixel_means);
+                    pixel_means = reshape(self.pixel_means, 1, 1, 3);
+                    tmp = bsxfun(@minus, tmp, pixel_means);
                 else
                     tmp = tmp - self.pixel_means(pad_h+(1:crop_height), pad_w+(1:crop_width), :);
                 end
