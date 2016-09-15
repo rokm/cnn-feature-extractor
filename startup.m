@@ -1,7 +1,9 @@
-root_dir = fileparts(mfilename('fullpath'));
+function startup ()
+    root_dir = fileparts(mfilename('fullpath'));
 
-% Root directory
-addpath(root_dir);
+    % Root directory
+    addpath(root_dir);
 
-% Caffe (binary)
-addpath(fullfile(root_dir, 'external', 'caffe-bin', 'matlab'));
+    % Caffe (binary)
+    addpath(fullfile(root_dir, 'external', 'caffe-bin', 'matlab'));
+end

@@ -1,16 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
 MATLABDIR=/usr/local/MATLAB/R2015b
 
 EXTERNAL_ROOT=$(pwd)
 
 
+# Quit on error
+set -e
+
 ########################################################################
 #                             Build Caffe                              #
 ########################################################################
 pushd caffe
 
-mkdir build
+mkdir -p build
 pushd build
 
 cmake \
@@ -19,6 +22,8 @@ cmake \
     -DAtlas_CBLAS_LIBRARY=/usr/lib64/atlas/libtatlas.so \
     -DAtlas_BLAS_LIBRARY=/usr/lib64/atlas/libtatlas.so \
     -DAtlas_LAPACK_LIBRARY=/usr/lib64/atlas/libtatlas.so \
+    -DCUDA_HOST_COMPILER=/usr/bin/g++ \
+    -DCUDA_NVCC_FLAGS="-Xcompiler -std=c++98" \
     -DBUILD_matlab=ON \
     -DMatlab_DIR=${MATLABDIR} \
     ..
