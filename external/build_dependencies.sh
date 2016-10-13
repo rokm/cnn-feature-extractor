@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MATLABDIR=/usr/local/MATLAB/R2015b
+MATLABDIR=${MATLABDIR:-/usr/local/MATLAB/R2015b}
 
 EXTERNAL_ROOT=$(pwd)
 
