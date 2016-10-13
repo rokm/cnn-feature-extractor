@@ -22,6 +22,7 @@ cmake \
     -DAtlas_CBLAS_LIBRARY=/usr/lib64/atlas/libtatlas.so \
     -DAtlas_BLAS_LIBRARY=/usr/lib64/atlas/libtatlas.so \
     -DAtlas_LAPACK_LIBRARY=/usr/lib64/atlas/libtatlas.so \
+    -DCUDA_ARCH_NAME=Manual \
     -DCUDA_HOST_COMPILER=/usr/bin/g++ \
     -DCUDA_NVCC_FLAGS="-Xcompiler -std=c++98" \
     -DBUILD_matlab=ON \
