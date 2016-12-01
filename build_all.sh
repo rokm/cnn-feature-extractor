@@ -38,6 +38,7 @@ cmake \
     -DCUDA_ARCH_NAME=Manual \
     -DCUDA_HOST_COMPILER=/usr/bin/g++ \
     -DCUDA_NVCC_FLAGS="-Xcompiler -std=c++98" \
+    -DUSE_OPENCV=OFF \
     -DBUILD_matlab=ON \
     -DMatlab_DIR=${MATLABDIR}
 
