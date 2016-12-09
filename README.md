@@ -32,11 +32,20 @@ Note that because MatCaffe bindings are dynamically linked against
 libcaffe.so, the latter needs to be in LD_LIBRARY_PATH before Matlab
 is started.
 
+# Dependencies
+Make sure that Caffe dependencies are installed; the list of packages
+for Fedora is:
+```Shell
+sudo dnf install cmake gcc-c++ gflags-devel glog-devel boost-devel \
+    protobuf-devel hdf5-devel lmdb-devel snappy-devel leveldb-devel \
+    openblas-devel python-devel python2-numpy
+```
+
+# Build commands
 ```Shell
 # Checkout the source
 git clone
-git submodule init
-git submodule update --recursive
+git submodule update --init --recursive
 
 # Build and deploy dependencies
 export MATLABDIR=/usr/local/MATLAB/R2016b
