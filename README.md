@@ -44,7 +44,8 @@ sudo dnf install cmake gcc-c++ gflags-devel glog-devel boost-devel \
 # Build commands
 ```Shell
 # Checkout the source
-git clone
+git clone https://github.com/rokm/cnn-feature-extractor.git
+cd cnn-feature-extractor
 git submodule update --init --recursive
 
 # Build and deploy dependencies
@@ -53,9 +54,10 @@ export MATLABDIR=/usr/local/MATLAB/R2016b
 
 # Start Matlab
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH;/path/to/project/external/caffe-bin/lib64
-${MATLABDIR}/bin/matlab```
+${MATLABDIR}/bin/matlab
+```
 
 ## References ##
-[1] Girshick, Ross, et al. "Rich feature hierarchies for accurate object detection and semantic segmentation." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014.
-[2] Sharif Razavian, Ali, et al. "CNN features off-the-shelf: an astounding baseline for recognition." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops. 2014.
-[3] https://github.com/rbgirshick/rcnn
+1. Girshick, Ross, et al. "Rich feature hierarchies for accurate object detection and semantic segmentation." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014.
+2. Sharif Razavian, Ali, et al. "CNN features off-the-shelf: an astounding baseline for recognition." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops. 2014.
+3. https://github.com/rbgirshick/rcnn
