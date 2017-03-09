@@ -89,7 +89,7 @@ classdef CnnFeatureExtractor < handle
             self.square_crop = parser.Results.square_crop;
             self.padding = parser.Results.padding;
 
-            if parser.Results.use_gpu,
+            if parser.Results.use_gpu
                 caffe.set_mode_gpu();
             else
                 caffe.set_mode_cpu();
@@ -97,11 +97,11 @@ classdef CnnFeatureExtractor < handle
 
             %% Pixel means
             pixel_means = parser.Results.pixel_means;
-            if ~isempty(pixel_means),
-                if ischar(pixel_means),
+            if ~isempty(pixel_means)
+                if ischar(pixel_means)
                     % Filename
                     [ ~, ~, ext ] = fileparts(pixel_means);
-                    if isequal(ext, '.mat'),
+                    if isequal(ext, '.mat')
                         % MAT file, containing 'pixel_means' variable
                         tmp = load(pixel_means);
                         self.pixel_means = tmp.pixel_means;
@@ -109,7 +109,7 @@ classdef CnnFeatureExtractor < handle
                         % Caffe binary format
                         self.pixel_means = caffe.io.read_mean(pixel_means);
                     end
-                elseif isnumeric(pixel_means),
+                elseif isnumeric(pixel_means)
                     % Numeric values
                     self.pixel_means = squeeze(pixel_means);
                 end
@@ -128,7 +128,7 @@ classdef CnnFeatureExtractor < handle
             self.cnn = caffe.get_net(proto_file, data_file , 'test');
 
             % Make sure that default layer name is available
-            if ~isempty(self.layer_name),
+            if ~isempty(self.layer_name)
                 assert(ismember(self.layer_name, self.cnn.blob_names), 'Invalid output layer/blob name!');
             end
 
@@ -168,7 +168,7 @@ classdef CnnFeatureExtractor < handle
 
             % Default box: whole image
             regions = parser.Results.regions;
-            if isempty(regions),
+            if isempty(regions)
                 regions = [ 1, 1, size(I,2), size(I,1) ]';
             end
             assert(size(regions,1) == 4, 'boxes must be 4xN matrix!');
@@ -176,7 +176,7 @@ classdef CnnFeatureExtractor < handle
 
             % Layer
             layer_name = parser.Results.layer_name;
-            if isempty(layer_name),
+            if isempty(layer_name)
                 layer_name = self.layer_name;
             else
                 assert(ismember(layer_name, self.cnn.blob_names), 'Invalid layer name!');
@@ -191,15 +191,15 @@ classdef CnnFeatureExtractor < handle
             output = nan(output_dim(1), num_regions);
 
             %% Prepare input image
-            if self.input_dim(3) == 3,
+            if self.input_dim(3) == 3
                 % Convert image to single-precision, BGR
-                if size(I, 3) == 1,
+                if size(I, 3) == 1
                     I = repmat(I, 1, 1, 3);
                 end
                 Ic = single(I(:, :, [ 3, 2, 1]));
-            elseif self.input_dim(3) == 1,
+            elseif self.input_dim(3) == 1
                 % Convert image to single-precision, grayscale
-                if size(I, 3) == 3,
+                if size(I, 3) == 3
                     I = rgb2gray(I);
                 end
                 Ic = single(I);
@@ -212,7 +212,7 @@ classdef CnnFeatureExtractor < handle
             num_batches = ceil(num_regions / batch_size);
 
             idx = 1;
-            for b = 1:num_batches,
+            for b = 1:num_batches
                 cur_batch_size = min(num_regions, batch_size);
 
                 fprintf('Batch #%d: %d regions (%d ~ %d)\n', b, cur_batch_size, idx, idx+cur_batch_size-1);
@@ -246,7 +246,7 @@ classdef CnnFeatureExtractor < handle
             data = zeros(data_size, 'single');
 
             % Crop all regions
-            for r = 1:num_regions,
+            for r = 1:num_regions
                 Ic = crop_region(self, I, regions(:,r));
 
                 % Switch dimensions to achieve Caffee-compatible layout
@@ -291,7 +291,7 @@ classdef CnnFeatureExtractor < handle
 
                 if square_crop,
                     % Make the box a tight square
-                    if half_height > half_width,
+                    if half_height > half_width
                         half_width = half_height;
                     else
                         half_height = half_width;
@@ -324,10 +324,10 @@ classdef CnnFeatureExtractor < handle
                 pad_h = pad_y1;
                 pad_w = pad_x1;
 
-                if pad_y1 + crop_height > crop_size,
+                if pad_y1 + crop_height > crop_size
                     crop_height = crop_size - pad_y1;
                 end
-                if pad_x1 + crop_width > crop_size,
+                if pad_x1 + crop_width > crop_size
                     crop_width = crop_size - pad_x1;
                 end
             end
@@ -345,8 +345,8 @@ classdef CnnFeatureExtractor < handle
             tmp = imresize(window, [ crop_height, crop_width ], 'bilinear', 'antialiasing', false);
 
             % Subtract pixel means
-            if ~isempty(self.pixel_means),
-                if isvector(self.pixel_means),
+            if ~isempty(self.pixel_means)
+                if isvector(self.pixel_means)
                     pixel_means = reshape(self.pixel_means, 1, 1, 3);
                     tmp = bsxfun(@minus, tmp, pixel_means);
                 else
@@ -355,7 +355,7 @@ classdef CnnFeatureExtractor < handle
             end
 
             % Scale
-            if ~isempty(self.pixel_scale),
+            if ~isempty(self.pixel_scale)
                 tmp = bsxfun(@times, tmp, self.pixel_scale);
             end
 
