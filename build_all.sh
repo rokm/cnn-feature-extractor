@@ -13,9 +13,16 @@ set -e
 #                             Build Caffe                              #
 ########################################################################
 # Fedora dependencies:
-#  boost-devel glog-devel gflags-devel protobuf-devel opencv-devel
+#  cmake gcc-c++ boost-devel glog-devel gflags-devel  protobuf-devel
 #  hdf5-devel lmdb-devel leveldb-devel snappy-devel openblas-devel
-#  python2-numpy
+#  python-devel python2-numpy
+#  cuda-devel cudnn-devel
+#
+# Ubuntu dependencies:
+#  cmake build-essential libboost-all-dev libgflags-dev libgoogle-glog-dev
+#  libprotobuf-dev protobuf-compiler libhdf5-dev liblmdb-dev libleveldb-dev
+#  libsnappy-dev libopenblas-dev python-dev python-numpy
+#  nvidia-cuda-toolkit
 CAFFE_SOURCE_DIR="${ROOT_DIR}/external/caffe"
 CAFFE_BUILD_DIR="${CAFFE_SOURCE_DIR}/build"
 CAFFE_INSTALL_DIR="${ROOT_DIR}/external/caffe-bin"

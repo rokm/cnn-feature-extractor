@@ -36,9 +36,18 @@ is started.
 Make sure that Caffe dependencies are installed; the list of packages
 for Fedora is:
 ```Shell
-sudo dnf install cmake gcc-c++ gflags-devel glog-devel boost-devel \
-    protobuf-devel hdf5-devel lmdb-devel snappy-devel leveldb-devel \
+sudo dnf install cmake gcc-c++ boost-devel glog-devel gflags-devel \
+    protobuf-devel hdf5-devel lmdb-devel leveldb-devel snappy-devel \
     openblas-devel python-devel python2-numpy
+sudo dnf install  cuda-devel cudnn-devel
+```
+and for Ubuntu:
+```Shell
+sudo apt-get install cmake build-essential libboost-all-dev libgflags-dev \
+    libgoogle-glog-dev libprotobuf-dev protobuf-compiler libhdf5-dev \
+    liblmdb-dev libleveldb-dev libsnappy-dev libopenblas-dev python-dev \
+    python-numpy
+sudo apt-get install nvidia-cuda-toolkit
 ```
 
 # Build commands
