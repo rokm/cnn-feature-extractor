@@ -34,12 +34,12 @@ is started.
 
 # Dependencies
 Make sure that Caffe dependencies are installed; the list of packages
-for Fedora is:
+for Fedora is (assuming [Negativo17's repository](https://negativo17.org/multimedia) is used for CUDA):
 ```Shell
 sudo dnf install cmake gcc-c++ boost-devel glog-devel gflags-devel \
     protobuf-devel hdf5-devel lmdb-devel leveldb-devel snappy-devel \
     openblas-devel python-devel python2-numpy
-sudo dnf install  cuda-devel cudnn-devel
+sudo dnf install  cuda-devel cudnn-devel cuda-gcc-c++
 ```
 and for Ubuntu:
 ```Shell
@@ -62,7 +62,7 @@ export MATLABDIR=/usr/local/MATLAB/R2016b
 ./build_all.sh
 
 # Start Matlab
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH;/path/to/project/external/caffe-bin/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/project/external/caffe-bin/lib64
 ${MATLABDIR}/bin/matlab
 ```
 
